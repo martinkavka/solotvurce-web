@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI pro sólotvůrce – online kurz vibecodingu pro netechniky</title>
+  <meta name="description" content="Online kurz pro sólotvůrce, kteří nikdy nenapsali řádku kódu. S AI si postavíte web, napíšete newsletter, vyrobíte prezentaci i zpracujete dokumenty. Komunita, kde si pomáháme – neajťácky. Mac i Windows." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="author" content="Hadoš s.r.o." />
+  <meta name="theme-color" content="#121b30" />
+  <link rel="canonical" href="https://solotvurce.cz" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://solotvurce.cz" />
+  <meta property="og:title" content="AI pro sólotvůrce – online kurz vibecodingu pro netechniky" />
+  <meta property="og:description" content="Weby. Vizuály. Prezentace. Bez řádky kódu. Online kurz pro sólotvůrce, co nikdy neprogramovali." />
+  <meta property="og:locale" content="cs_CZ" />
+  <meta property="og:site_name" content="AI pro sólotvůrce" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* konstanty napříč režimy */
+    :root {
+      --ink:        #16213a;
+      --blue:       #2a3a7e;
+      --yellow:     #FFCC33;
+      --yellow-dark:#e6b800;
+      --disp: 'Newsreader', Georgia, serif;
+      --body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+    }
+    /* TMAVÝ režim (výchozí) */
+    :root, :root[data-theme="dark"] {
+      --bg:        #121b30;
+      --bg-soft:   #16203a;
+      --nav-bg:    rgba(18,27,48,0.84);
+      --text:      #ece3d1;
+      --text-soft: rgba(236,227,209,.76);
+      --text-mut:  rgba(236,227,209,.55);
+      --line:      rgba(244,236,221,.22);
+      --line-soft: rgba(244,236,221,.12);
+      --paper:     #f6efdf;   /* světlá karta na tmavém stole */
+      --icon:      #FFCC33;
+      --num:       #FFCC33;
+      --shadow:    rgba(0,0,0,.42);
+      --s1: #FFCC33;  --s2: #2a3a7e;  --s3: rgba(0,0,0,.5);
+      --dot: #ffd24d;
+    }
+    /* SVĚTLÝ režim */
+    :root[data-theme="light"] {
+      --bg:        #fbf4e6;
+      --bg-soft:   #f2e9d8;
+      --nav-bg:    rgba(251,244,230,0.85);
+      --text:      #16213a;
+      --text-soft: #33405f;
+      --text-mut:  #5b6a86;
+      --line:      rgba(34,50,118,.30);
+      --line-soft: rgba(34,50,118,.15);
+      --paper:     #ffffff;   /* bílá karta na krémovém papíru */
+      --icon:      #223276;
+      --num:       #e6b800;
+      --shadow:    rgba(22,33,58,.30);
+      --s1: #223276;  --s2: #16213a;  --s3: #e6b800;
+      --dot: #223276;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body); line-height: 1.6; -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; position: relative;
+    }
+    /* RISO papírový šum */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+      opacity: .32; mix-blend-mode: overlay;
+      background-image: var(--grain);
+    }
+    /* jemný halftone rastr přes celou stránku (riso) */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+      opacity: .06;
+      background-image: radial-gradient(var(--dot) 1px, transparent 1.7px);
+      background-size: 7px 7px;
+    }
+
+    h1, h2, h3, .price-big, .step-num, .nav-logo, .bio-name, .faq-q, footer h4 {
+      font-family: var(--disp); font-optical-sizing: auto;
+    }
+
+    /* zvýraznění = fixa (ostré, lehce pootočené, plně obalí slovo i diakritiku) */
+    .mark { position: relative; white-space: nowrap; color: var(--ink); padding: 0 .12em; }
+    .mark::before {
+      content: ''; position: absolute; z-index: -1;
+      left: 0; right: 0; top: -.18em; bottom: -.12em;
+      background: var(--yellow);
+    }
+    /* ručně kreslené pero */
+    .hand { stroke: var(--yellow); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .ann { font-family: var(--disp); font-style: italic; color: var(--text-soft); }
+
+    /* ── NAV ─────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 10001;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--text); padding: 0 6%;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+    .theme-toggle {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: transparent; color: var(--text);
+      border: 2px solid var(--text); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .theme-toggle:hover { background: var(--text); color: var(--bg); }
+    .theme-toggle svg { width: 18px; height: 18px; }
+    .theme-toggle .ic-moon { display: none; }
+    :root[data-theme="light"] .theme-toggle .ic-sun  { display: none; }
+    :root[data-theme="light"] .theme-toggle .ic-moon { display: block; }
+    .nav-logo { font-weight: 600; font-size: 1.32rem; color: var(--text); display: flex; align-items: baseline; gap: 7px; text-decoration: none; letter-spacing: -.2px; }
+    .nav-logo .logo-mark { color: var(--yellow); font-size: 1.5rem; }
+    .nav-logo small { font-family: var(--disp); font-style: italic; font-weight: 400; font-size: .92rem; color: var(--text-mut); }
+    .nav-cta { background: var(--yellow); color: var(--ink); padding: 9px 20px; font-size: .85rem; font-weight: 800; text-decoration: none; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--shadow); transition: transform .12s, box-shadow .12s; }
+    .nav-cta:hover { transform: translate(1.5px,1.5px); box-shadow: 1.5px 1.5px 0 var(--shadow); }
+
+    /* ── BUTTONS (hranaté, tištěné) ─ */
+    .btn-primary { background: var(--yellow); color: var(--ink); padding: 15px 32px; font-weight: 800; font-size: 1rem; text-decoration: none; display: inline-block; border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--shadow); transition: transform .12s, box-shadow .12s; }
+    .btn-primary:hover { transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--shadow); }
+    .btn-ghost { background: transparent; color: var(--text); padding: 14px 26px; font-weight: 700; font-size: 1rem; text-decoration: none; display: inline-block; border: 2px solid var(--text); transition: background .15s, color .15s; }
+    .btn-ghost:hover { background: var(--text); color: var(--bg); }
+
+    h2 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 600; letter-spacing: -.6px; line-height: 1.28; margin-bottom: 18px; color: var(--text); max-width: 900px; }
+    .lead { font-size: 1.18rem; max-width: 660px; margin-bottom: 0; line-height: 1.7; color: var(--text-soft); }
+
+    /* position+z-index: vlastní stacking context, ať žlutý pruh .mark (z-index:-1)
+       neutíká pod barevné pozadí sekce */
+    .section { padding: 86px 6%; position: relative; z-index: 0; }
+    .section-inner { max-width: 1120px; margin: 0 auto; }
+
+    /* ── HERO ────────────────────── */
+    .hero { padding: 60px 6% 86px; position: relative; }
+    .hero-grid { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
+    @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; gap: 20px; } }
+
+    .hero-tag { display: inline-block; font-family: var(--disp); font-style: italic; font-size: 1.25rem; color: var(--yellow); margin-bottom: 18px; }
+    .hero h1 { font-size: clamp(2.8rem, 7vw, 5rem); font-weight: 600; line-height: 1.2; letter-spacing: -1px; color: var(--text); margin-bottom: 22px; }
+    .hero h1 .line { display: block; }
+    .hero-sub { font-size: clamp(1.05rem, 2.2vw, 1.22rem); color: var(--text-soft); max-width: 460px; line-height: 1.65; margin-bottom: 30px; }
+    .hero-cta-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+    .hero-meta { font-size: 1rem; color: var(--text-soft); font-weight: 500; }
+    .hero-meta b { color: var(--text); font-weight: 700; }
+
+    /* collage – papírové vzorky, ostré rohy, soutiskové stíny */
+    .collage { position: relative; height: 410px; }
+    @media (max-width: 880px) { .collage { height: 360px; margin-top: 8px; } }
+    .sample { position: absolute; background: var(--paper); color: var(--ink); padding: 18px 20px; width: 248px; border: 2px solid var(--ink); }
+    /* tištěná zrnitost na papírových kartách */
+    .sample::after, .ticket::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: var(--grain); mix-blend-mode: multiply; opacity: .6; }
+    .sample > *, .ticket > * { position: relative; z-index: 1; }
+    .sample .ic { width: 38px; height: 38px; margin-bottom: 8px; color: var(--blue); }
+    .sample b { display: block; font-family: var(--disp); font-size: 1.2rem; font-weight: 600; color: var(--ink); }
+    .sample span { font-size: .9rem; color: #4a5878; line-height: 1.5; }
+    .sample-1 { top: 0;   left: 0;    z-index: 4; box-shadow: 8px 8px 0 var(--s1); }
+    .sample-2 { top: 30%; left: 16%;  z-index: 3; box-shadow: 8px 8px 0 var(--s2); }
+    .sample-3 { top: 60%; left: 32%;  z-index: 2; box-shadow: 8px 8px 0 var(--s3); }
+    .sample:hover { transform: translateY(-3px); transition: transform .2s; z-index: 9; }
+
+    .stamp { position: absolute; top: -4%; right: 0; z-index: 6; width: 112px; height: 112px; border-radius: 50%; background: var(--yellow); border: 2.5px dashed var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--ink); line-height: 1; }
+    .stamp b { font-family: var(--disp); font-weight: 700; font-size: 1.95rem; line-height: .9; }
+    .stamp small { font-size: .6rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; font-weight: 800; line-height: 1.3; }
+    @media (max-width: 880px) { .stamp { right: 1%; top: -6%; } }
+
+
+    /* ── INDEX (rejstřík výstupů) ── */
+    .index { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; margin-top: 4px; }
+    @media (max-width: 720px) { .index { grid-template-columns: 1fr; } }
+    .irow { display: grid; grid-template-columns: 42px 1fr; gap: 18px; align-items: start; padding: 24px 0; border-top: 1px solid var(--line-soft); }
+    .irow .ic { width: 34px; height: 34px; color: var(--icon); margin-top: 2px; }
+    .irow h3 { font-size: 1.45rem; font-weight: 600; color: var(--text); margin-bottom: 6px; letter-spacing: -.2px; }
+    .irow p { font-size: 1.04rem; color: var(--text-soft); line-height: 1.6; }
+    .index-cta { margin-top: 44px; display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+    .index-cta .ann { font-size: 1.2rem; }
+
+    /* ── PRO KOHO ──────────────────── */
+    .who { font-size: clamp(1.15rem, 2.4vw, 1.5rem); color: var(--text-soft); line-height: 1.65; max-width: 720px; margin-bottom: 30px; font-family: var(--disp); }
+    .who strong { color: var(--text); font-weight: 600; }
+    .rolesline { font-size: clamp(1.4rem, 3.4vw, 2.1rem); font-family: var(--disp); font-weight: 500; line-height: 1.5; color: var(--text); max-width: 880px; }
+    .rolesline u { text-decoration: none; border-bottom: 5px solid var(--yellow); padding-bottom: 1px; }
+
+    /* ── OSNOVA ──────────────────── */
+    .steps { display: flex; flex-direction: column; }
+    .step { display: grid; grid-template-columns: 100px 1fr; gap: 28px; align-items: start; padding: 30px 0; border-top: 1px solid var(--line-soft); }
+    .step:first-child { border-top: 2px solid var(--line); }
+    .step:last-child { border-bottom: 2px solid var(--line); }
+    @media (max-width: 620px) { .step { grid-template-columns: 56px 1fr; gap: 18px; } }
+    .step-num { font-size: clamp(2.8rem, 6vw, 4rem); font-weight: 600; line-height: 1; color: var(--num); }
+    .step h3 { font-size: 1.5rem; font-weight: 600; color: var(--text); margin-bottom: 7px; letter-spacing: -.3px; }
+    .step p { font-size: 1.08rem; color: var(--text-soft); line-height: 1.7; max-width: 620px; }
+    .steps-note { margin-top: 28px; max-width: 720px; font-size: 1.02rem; color: var(--text-soft); line-height: 1.7; padding-left: 20px; border-left: 5px solid var(--yellow); font-family: var(--disp); font-style: italic; }
+    .steps-note strong { color: var(--text); font-style: normal; }
+
+    /* ── AUTOŘI (editorial, bez karet) ── */
+    .bios { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+    @media (max-width: 720px) { .bios { grid-template-columns: 1fr; gap: 48px; } }
+    .bio { border-top: 2px solid var(--line); padding-top: 30px; }
+    .bio-head { display: flex; gap: 26px; align-items: center; margin-bottom: 24px; }
+    .bio-photo { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 4px solid var(--yellow); box-shadow: 8px 8px 0 var(--s2); }
+    @media (max-width: 460px) { .bio-photo { width: 120px; height: 120px; } }
+    .bio-name { font-size: 1.95rem; font-weight: 600; color: var(--text); line-height: 1.05; margin-bottom: 8px; }
+    .bio-kicker { font-family: var(--disp); font-style: italic; font-size: 1.22rem; color: var(--text-soft); line-height: 1.38; }
+    .bio p { font-size: 1.05rem; color: var(--text-soft); line-height: 1.72; margin-bottom: 14px; }
+    .bio p strong { color: var(--text); font-weight: 600; }
+    .bio-role { font-size: 1.05rem; color: var(--text); }
+    .bio-links { margin-top: 18px; font-size: .98rem; font-weight: 600; }
+    .bio-links a { color: var(--text-soft); text-decoration: none; border-bottom: 2px solid var(--line); margin-right: 18px; padding-bottom: 2px; }
+    .bio-links a:hover { color: var(--yellow); border-color: var(--yellow); }
+    .bio p a { color: var(--text); text-decoration: none; border-bottom: 2px solid var(--yellow); }
+    .bio p a:hover { color: var(--yellow); }
+
+    /* ── PŘEDPRODEJ (ticket, hranatý) ── */
+    .ticket { max-width: 520px; background: var(--paper); color: var(--ink); padding: 42px; position: relative; border: 2px solid var(--ink); box-shadow: 11px 11px 0 var(--shadow); }
+    .ticket-stamp { position: absolute; top: -16px; right: 26px; background: var(--yellow); color: var(--ink); border: 2px solid var(--ink); font-size: .68rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 6px 16px; }
+    .price-wrap { position: relative; display: inline-block; margin-bottom: 6px; }
+    .price-row { display: flex; align-items: baseline; gap: 12px; }
+    .price-big { font-weight: 600; font-size: 3.9rem; line-height: 1; color: var(--ink); letter-spacing: -1px; }
+    .price-per { font-size: 1.3rem; font-weight: 600; color: var(--ink); align-self: flex-end; margin-bottom: .5rem; margin-left: -6px; }
+    .price-was { font-size: 1.15rem; color: #5b6a86; text-decoration: line-through; opacity: .8; }
+    .price-circle { position: absolute; left: -16px; top: -12px; width: 220px; height: 96px; pointer-events: none; }
+    .price-circle path { stroke: var(--yellow-dark); }
+    .price-note { font-size: .85rem; color: #5b6a86; margin: 8px 0 26px; padding-bottom: 26px; border-bottom: 2px dashed rgba(22,33,58,.35); }
+    .price-list { list-style: none; padding: 0; margin: 0 0 28px; }
+    .price-list li { position: relative; padding-left: 26px; margin-bottom: 12px; font-size: 1.04rem; color: var(--ink); line-height: 1.5; }
+    .price-list li::before { content: '▸'; position: absolute; left: 4px; top: 0; color: var(--yellow-dark); font-weight: 800; }
+    .btn-buy { display: block; width: 100%; text-align: center; background: var(--ink); color: var(--paper); padding: 16px; font-weight: 800; font-size: 1.02rem; text-decoration: none; border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--yellow); transition: transform .12s, box-shadow .12s; }
+    .btn-buy:hover { transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--yellow); }
+    .price-sub { font-size: .82rem; color: #5b6a86; margin-top: 16px; text-align: center; line-height: 1.6; }
+
+    /* ── FAQ ─────────────────────── */
+    .faq { max-width: 780px; }
+    .faq-item { border-top: 1px solid var(--line-soft); padding: 24px 0; }
+    .faq-item:last-child { border-bottom: 1px solid var(--line-soft); }
+    .faq-q { display: flex; gap: 14px; align-items: baseline; font-size: 1.4rem; font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -.2px; }
+    .faq-q .q { flex-shrink: 0; width: 16px; height: 16px; background: var(--yellow); display: inline-block; transform: translateY(2px); }
+    .faq-a { font-size: 1.08rem; color: var(--text-soft); line-height: 1.7; padding-left: 30px; }
+    .faq-a strong { color: var(--text); }
+
+    /* ── CTA (plochý žlutý blok, vlevo) ── */
+    .cta-section { padding: 86px 6%; }
+    .cta-box { max-width: 1120px; margin: 0 auto; background: var(--yellow); color: var(--ink); padding: 60px 52px; position: relative; overflow: hidden; border: 2px solid var(--ink); }
+    .cta-box::before { content: ''; position: absolute; inset: 0; opacity: .1; pointer-events: none; background-image: radial-gradient(var(--ink) 1.3px, transparent 1.6px); background-size: 16px 16px; }
+    .cta-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; }
+    @media (max-width: 720px) { .cta-grid { grid-template-columns: 1fr; gap: 24px; } }
+    .cta-box h2 { color: var(--ink); margin-bottom: 8px; max-width: 620px; }
+    .cta-box p { font-size: 1.08rem; color: rgba(22,33,58,.82); max-width: 480px; line-height: 1.55; }
+    .btn-cta-dark { background: var(--ink); color: var(--paper); padding: 17px 38px; font-weight: 800; font-size: 1.05rem; text-decoration: none; display: inline-block; border: 2px solid var(--ink); box-shadow: 6px 6px 0 rgba(255,255,255,.5); white-space: nowrap; transition: transform .12s, box-shadow .12s; }
+    .btn-cta-dark:hover { transform: translate(2px,2px); box-shadow: 4px 4px 0 rgba(255,255,255,.5); }
+    .cta-note { font-size: .82rem; color: rgba(22,33,58,.65); margin-top: 14px; }
+
+    /* ── FOOTER ──────────────────── */
+    footer { background: var(--bg-soft); padding: 48px 6% 36px; font-size: .82rem; color: var(--text-mut); line-height: 1.75; border-top: 2px solid var(--text); }
+    footer .footer-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; }
+    @media (max-width: 720px) { footer .footer-inner { grid-template-columns: 1fr; gap: 24px; } }
+    footer h4 { color: var(--text); font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; }
+    footer a { color: var(--text-soft); text-decoration: none; border-bottom: 1px solid var(--line-soft); }
+    footer a:hover { color: var(--yellow); border-color: var(--yellow); }
+    footer .footer-meta { max-width: 1120px; margin: 32px auto 0; padding-top: 24px; border-top: 1px solid var(--line-soft); font-size: .76rem; color: var(--text-mut); text-align: center; }
+
+    /* ── VIDEO ───────────────────── */
+    .video { max-width: 900px; margin-top: 8px; }
+    .video iframe, .video video { width: 100%; aspect-ratio: 16 / 9; border: 2px solid var(--text); box-shadow: 11px 11px 0 var(--shadow); display: block; background: #000; }
+    /* video sekci vyzvedneme nad celostránkový riso rastr, ať video není „puntíkované" */
+    #video { z-index: 10000; }
+    .video-speed { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
+    .video-speed-label { font-family: var(--disp); font-style: italic; font-size: .95rem; color: var(--text-soft); margin-right: 2px; }
+    .video-speed button { font-family: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; padding: 5px 13px; background: var(--bg-soft); color: var(--text); border: 2px solid var(--text); box-shadow: 3px 3px 0 var(--shadow); transition: transform .12s, box-shadow .12s; }
+    .video-speed button:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--shadow); }
+    .video-speed button.is-active { background: var(--yellow); color: var(--ink); }
+    .video-ph {
+      position: relative; aspect-ratio: 16 / 9; cursor: pointer;
+      background: var(--bg-soft); border: 2px solid var(--text); box-shadow: 11px 11px 0 var(--shadow);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .video-ph::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .07; background-image: radial-gradient(var(--dot) 1px, transparent 1.7px); background-size: 8px 8px; }
+    .video-play { width: 0; height: 0; border-style: solid; border-width: 26px 0 26px 44px; border-color: transparent transparent transparent var(--yellow); }
+    .video-cap { position: absolute; left: 20px; bottom: 16px; font-family: var(--disp); font-style: italic; font-size: 1.15rem; color: var(--text-soft); }
+
+    /* ── KURZ, KTERÝ ROSTE ───────── */
+    .grow { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; margin-top: 6px; }
+    @media (max-width: 720px) { .grow { grid-template-columns: 1fr; } }
+    .grow-item { display: grid; grid-template-columns: 40px 1fr; gap: 16px; align-items: start; padding: 26px 0; border-top: 1px solid var(--line-soft); }
+    .grow-item .ic { width: 32px; height: 32px; color: var(--icon); margin-top: 2px; }
+    .grow-item h3 { font-size: 1.3rem; font-weight: 600; color: var(--text); margin-bottom: 5px; letter-spacing: -.2px; }
+    .grow-item p { font-size: 1.04rem; color: var(--text-soft); line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 40px 5% 56px; }
+      .section { padding: 60px 5%; }
+      .cta-section { padding: 56px 5%; }
+      .ticket { padding: 30px 24px; }
+      .cta-box { padding: 40px 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- doodle ikony + ruční pero -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="d-text"><path d="M10 14h28M10 22h28M10 30h18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></g>
+    <g id="d-web"><rect x="7" y="9" width="34" height="30" rx="0" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M7 17h34" stroke="currentColor" stroke-width="2.6"/><circle cx="12" cy="13" r="1.4" fill="currentColor"/><circle cx="17" cy="13" r="1.4" fill="currentColor"/><path d="M13 26c5-3 9 3 14 0s8-2 10 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></g>
+    <g id="d-img"><rect x="7" y="10" width="34" height="28" rx="0" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="17" cy="19" r="3.2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M9 36l10-11 7 7 6-6 9 9" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="d-slides"><rect x="8" y="9" width="32" height="22" rx="0" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M24 31v6M16 40h16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M14 24v-6M21 24v-9M28 24v-4M34 24v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></g>
+    <g id="d-doc"><path d="M13 7h16l8 8v26a1 1 0 0 1-1 1H13a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M29 7v8h8M18 25h12M18 31h12M18 19h6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></g>
+    <g id="d-brain"><path d="M24 11c-5-3-12 0-12 6 0 2 1 3 1 4-2 2-2 6 1 7 0 4 4 6 8 5M24 11c5-3 12 0 12 6 0 2-1 3-1 4 2 2 2 6-1 7 0 4-4 6-8 5M24 11v27" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="d-spark"><path d="M24 8l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/></g>
+    <g id="d-meet" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="18" cy="17" r="5.5"/><path d="M8 39c0-7 4.5-11 10-11s10 4 10 11"/><circle cx="33" cy="20" r="4.5"/><path d="M28 38c.5-5 3-8 7.5-8 4 0 6.5 3 6.5 8"/></g>
+    <g id="d-grow" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 38l11-11 7 6 14-15"/><path d="M32 18h8v8"/></g>
+    <g id="d-tag" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><path d="M23 8H11a3 3 0 0 0-3 3v12l19 19 15-15z"/><circle cx="16.5" cy="16.5" r="2.3"/></g>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">AI pro sólotvůrce</a>
+  <div class="nav-right">
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Přepnout světlý a tmavý režim" title="Přepnout režim">
+      <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1.5 12h3M19.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+    </button>
+    <a href="#predprodej" class="nav-cta">Chci se přidat →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grid">
+    <div>
+      <h1>
+        <span class="line">Weby. Vizuály.</span>
+        <span class="line">Prezentace.</span>
+        <span class="line"><span class="mark">Bez řádky kódu.</span></span>
+      </h1>
+      <!-- TIP: sem se hodí váš vlastní rukopis (sken) -->
+      <p class="hero-sub">Online kurz pro sólotvůrce, kteří nikdy neprogramovali. Prošlapali jsme tu cestu před vámi&nbsp;– a&nbsp;teď vám k&nbsp;ní dáme mapu.</p>
+      <div class="hero-cta-row">
+        <a href="#predprodej" class="btn-primary">Chci se přidat →</a>
+        <a href="#vystupy" class="btn-ghost">Co si postavíte ↓</a>
+      </div>
+      <p class="hero-meta"><b>Tenhle kurz průběžně doplňujeme o&nbsp;další obsah.</b> Navíc kolem něj vzniká i&nbsp;komunita sólotvůrců, jako jste vy. Pomáháme si, inspirujeme se.</p>
+    </div>
+
+    <div class="collage">
+      <div class="stamp"><b>100%</b><small>vhodné pro<br/>neajťáky</small></div>
+      <div class="sample sample-1"><svg class="ic" viewBox="0 0 48 48"><use href="#d-web"/></svg><b>Vlastní web</b><span>Klidně za&nbsp;jedno odpoledne&nbsp;– a&nbsp;fakt hezký.</span></div>
+      <div class="sample sample-2"><svg class="ic" viewBox="0 0 48 48"><use href="#d-slides"/></svg><b>Prezentace</b><span>Interaktivní slajdy nebo PDF z&nbsp;vašich poznámek.</span></div>
+      <div class="sample sample-3"><svg class="ic" viewBox="0 0 48 48"><use href="#d-img"/></svg><b>Obrázky a&nbsp;vizuály</b><span>Ilustrace, infografiky i&nbsp;úpravy vlastních fotek.</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- VIDEO / UKÁZKA -->
+<section class="section" id="video">
+  <div class="section-inner">
+    <h2>Ať víte, do&nbsp;čeho jdete. <span class="mark">Mrkněte dovnitř.</span></h2>
+    <p class="lead" style="margin-bottom:40px;">Naše společné intro — jak mluvíme, jak věci ukazujeme a&nbsp;co od&nbsp;nás čekat. Žádné sliby, prostě se podívejte.</p>
+    <div class="video">
+      <!-- Self-hosted intro video. Soubor pojmenuj intro.mp4 a dej ho do této složky.
+           Volitelně náhledový obrázek: přidej intro-poster.jpg a doplň poster="intro-poster.jpg" do <video>. -->
+      <video id="introVideo" controls preload="metadata" playsinline>
+        <source src="intro.mp4" type="video/mp4" />
+        Váš prohlížeč neumí přehrát vložené video. <a href="intro.mp4">Stáhnout video</a>.
+      </video>
+      <div class="video-speed" role="group" aria-label="Rychlost přehrávání">
+        <span class="video-speed-label">Rychlost:</span>
+        <button type="button" data-rate="1" class="is-active">1×</button>
+        <button type="button" data-rate="1.25">1,25×</button>
+        <button type="button" data-rate="1.5">1,5×</button>
+        <button type="button" data-rate="1.75">1,75×</button>
+        <button type="button" data-rate="2">2×</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASY -->
+<section class="section" id="vystupy">
+  <div class="section-inner">
+    <h2>Co všechno si <span class="mark">postavíte.</span></h2>
+    <p class="lead" style="margin-bottom:40px;">Tohle je jenom pár vybraných tipů, ne celý výčet. Tipy, co si díky kurzu vytvořit, neustále přibývají.</p>
+
+    <div class="index">
+      <div class="irow"><svg class="ic" viewBox="0 0 48 48"><use href="#d-web"/></svg><div><h3>Web a&nbsp;landing page</h3><p>„Web bych nikdy nepostavil.&#8220; A&nbsp;přitom ho navajbujete rovnou ze zadání. Právě tady vám spadne brada.</p></div></div>
+      <div class="irow"><svg class="ic" viewBox="0 0 48 48"><use href="#d-slides"/></svg><div><h3>Prezentace</h3><p>Interaktivní slajdy nebo PDF z&nbsp;vašich poznámek. Pro učitele i&nbsp;marketéry parádní zkratka.</p></div></div>
+      <div class="irow"><svg class="ic" viewBox="0 0 48 48"><use href="#d-img"/></svg><div><h3>Obrázky a&nbsp;vizuály</h3><p>Ilustrace a&nbsp;infografiky přes napojení na&nbsp;generátor obrázků — i&nbsp;úpravy vlastních fotek.</p></div></div>
+      <div class="irow"><svg class="ic" viewBox="0 0 48 48"><use href="#d-doc"/></svg><div><h3>Dokumenty z&nbsp;dat</h3><p>Daňové podklady, evidence i&nbsp;výpisy z&nbsp;vlastních souborů. Papírování bez nervů.</p></div></div>
+      <div class="irow"><svg class="ic" viewBox="0 0 48 48"><use href="#d-text"/></svg><div><h3>Texty</h3><p>LinkedIn post, newsletter, článek na&nbsp;blog. Z&nbsp;jednoho podkladu víc výstupů — a&nbsp;myšlenky zůstávají pořád vaše.</p></div></div>
+      <div class="irow"><svg class="ic" viewBox="0 0 48 48"><use href="#d-tag"/></svg><div><h3>Vlastní nástroje místo předplatných</h3><p>Spoustu placených appek si navajbujete sami — přesně jako my. A&nbsp;měsíční předplatná, co se nasčítají, můžete škrtnout.</p></div></div>
+    </div>
+
+    <div class="index-cta">
+      <a href="#predprodej" class="btn-primary">Chci se přidat →</a>
+      <span class="ann">předprodej MVP právě běží</span>
+    </div>
+  </div>
+</section>
+
+<!-- KURZ, KTERÝ ROSTE -->
+<section class="section" style="background:var(--bg-soft)">
+  <div class="section-inner">
+    <h2>Kurz, který <span class="mark">roste s&nbsp;vámi.</span></h2>
+    <p class="lead">Není to zamčená krabice videí, co jednou natočíme a&nbsp;zapomeneme. Tohle žije — přidáváme lekce, témata i&nbsp;ukázky podle toho, co vy sami potřebujete. Koupíte rozjetý kurz a&nbsp;rostete s&nbsp;ním.</p>
+    <div class="grow">
+      <div class="grow-item"><svg class="ic" viewBox="0 0 48 48"><use href="#d-grow"/></svg><div><h3>Obsah přibývá</h3><p>Nová témata a&nbsp;lekce do&nbsp;hloubky přibývají průběžně. Kurz nikdy není „hotový&#8220; — pořád ho doplňujeme.</p></div></div>
+      <div class="grow-item"><svg class="ic" viewBox="0 0 48 48"><use href="#d-meet"/></svg><div><h3>Komunita, co táhne s&nbsp;vámi</h3><p>Nejen videa. Potkáváme se, řešíme vaše projekty i&nbsp;zádrhele a&nbsp;pomáháme si navzájem&nbsp;– neajťácky, ať se tu cítíte fajn.</p></div></div>
+      <div class="grow-item"><svg class="ic" viewBox="0 0 48 48"><use href="#d-spark"/></svg><div><h3>Roste podle vás</h3><p>Co budete potřebovat, to natočíme. Směr kurzu pomáháte udávat vy.</p></div></div>
+      <div class="grow-item"><svg class="ic" viewBox="0 0 48 48"><use href="#d-tag"/></svg><div><h3>Cena se zamkne</h3><p>Cenu, za&nbsp;kterou se přidáte, máte zamčenou napořád. Pro nové poroste&nbsp;– vám zůstává stejná každý rok.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 PRO KOHO -->
+<section class="section" style="background:var(--bg-soft)">
+  <div class="section-inner">
+    <h2>Když to zvládli netechnici jako my, <span class="mark">zvládnete to taky.</span></h2>
+    <p class="who">Nikdy jsme nenapsali ani řádku kódu. Nejsme ajťáci, jsme kreativci — a&nbsp;přesně proto vám to vysvětlíme lidsky, ne přes složité infografiky. <strong>Nemusíte se toho bát.</strong></p>
+    <p class="rolesline">Pro <u>marketéry</u>, učitele, <u>freelancery</u>, kreativce, maminky na&nbsp;rodičovské i&nbsp;<u>lidi 50+</u>.</p>
+  </div>
+</section>
+
+<!-- 03 OSNOVA -->
+<section class="section">
+  <div class="section-inner">
+    <h2>Od prvního spuštění <span class="mark">k&nbsp;hotovým výstupům.</span></h2>
+    <p class="lead" style="margin-bottom:44px;">Postupujeme od&nbsp;jednoduchého ke&nbsp;složitějšímu. Nejdřív vás bezpečně provedeme rozjezdem, pak teprve přijdou výstupy. Nikdo se neztratí.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">0</div><div><h3>Teaser</h3><p>Prohlídka toho, co všechno s&nbsp;AI zvládnete — abyste hned věděli, kam to vede.</p></div></div>
+      <div class="step"><div class="step-num">1</div><div><h3>Zprovoznění</h3><p>Instalace a&nbsp;první spuštění, krok za&nbsp;krokem. Mac i&nbsp;Windows. Rozptýlíme strach z&nbsp;příkazové řádky: píšete jako v&nbsp;chatu a&nbsp;mačkáte Enter. Nic složitého, ukážeme.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div><h3>Základní workflow</h3><p>Projektová složka, CLAUDE.md jako mozek projektu, jak s&nbsp;AI mluvit, ať vás poslechne — a&nbsp;co dělat, když nedělá, co chcete.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div><h3>Výstupy do&nbsp;šířky</h3><p>Celá řada různých výstupů, na&nbsp;každý čistý příklad: texty, web, obrázky, prezentace, dokumenty a&nbsp;další. Po&nbsp;prvních lekcích řeknete „tohle všechno?&#8220;.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div><h3>Pořád se rozrůstá</h3><p>Kurz se nezastaví — přibývají nové lekce, nápady i&nbsp;hromada inspirace, čím si zase dotáhnout vlastní projekty o&nbsp;kus dál.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div><h3>Komunita kolem</h3><p>A&nbsp;k&nbsp;tomu parta lidí jako vy. Sólotvůrci sice jsme, ale na&nbsp;všechno sami být nemusíme — pomáháme si navzájem.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 AUTOŘI -->
+<section class="section" style="background:var(--bg-soft)">
+  <div class="section-inner">
+    <h2>Dva tvůrci, <span class="mark">stejný příběh jako vy.</span></h2>
+    <p class="lead" style="margin-bottom:46px;">Učíme jen to, co sami denně používáme. Žádné motivační řeči, jen věci, co fungují hned.</p>
+    <div class="bios">
+      <div class="bio">
+        <div class="bio-head">
+          <img class="bio-photo" src="martin-kavka.jpg" alt="Martin Kavka"
+               onerror="this.outerHTML='<div class=\'bio-photo\' style=\'background:linear-gradient(135deg,#6d28d9,#9333ea);display:flex;align-items:center;justify-content:center;font-size:2.6rem;font-weight:800;color:white;min-width:150px;\'>MK</div>'">
+          <div>
+            <div class="bio-name">Martin Kavka</div>
+            <div class="bio-kicker">„Nikdy jsem nekódoval. A&nbsp;teď jsem za&nbsp;pár týdnů postavil 7&nbsp;webů a&nbsp;4&nbsp;vlastní aplikace.&#8220;</div>
+          </div>
+        </div>
+        <p>Poslední dva roky zkouším, jak psát s&nbsp;AI naplno a&nbsp;neztratit přitom vlastní hlas. Na&nbsp;jaře 2026 jsem navrch propadl i&nbsp;vajbování a&nbsp;chci s&nbsp;ním pomáhat dalším sólotvůrcům, kteří si na&nbsp;to doteď netroufli.</p>
+        <p>Píšu <a href="https://newslettery.cz" target="_blank" rel="noopener">Newslettery.cz</a>, založil jsem <a href="https://cestina20.cz" target="_blank" rel="noopener">Češtinu&nbsp;2.0</a>, školím v&nbsp;<a href="https://hados.cz" target="_blank" rel="noopener">Hadoši</a>, <a href="https://kilovaty.cz" target="_blank" rel="noopener">Kilovatech</a> nebo <a href="https://www.hajek-kavka.cz" target="_blank" rel="noopener">Hájek&nbsp;&amp;&nbsp;Kavka</a>.</p>
+      </div>
+      <div class="bio">
+        <div class="bio-head">
+          <img class="bio-photo" src="roman-veznik.jpg" alt="Roman Věžník"
+               onerror="this.outerHTML='<div class=\'bio-photo\' style=\'background:linear-gradient(135deg,#223276,#3a52a0);display:flex;align-items:center;justify-content:center;font-size:2.6rem;font-weight:800;color:white;min-width:150px;\'>RV</div>'">
+          <div>
+            <div class="bio-name">Roman Věžník</div>
+            <div class="bio-kicker">„Kreativec, co si staví vlastní nástroje. Taky bez kódu.&#8220;</div>
+          </div>
+        </div>
+        <p>Dennodenně používá AI ve&nbsp;třech rolích — píše prodejní texty, navrhuje online kurzy podle learning designu a&nbsp;staví si malé digitální nástroje. Pracoval pro <strong>NPI ČR, NSK</strong> a&nbsp;řadu firem.</p>
+        <p class="bio-role">V&nbsp;kurzu vede <span class="mark">vizuály, prezentace a&nbsp;Windows</span>.</p>
+        <div class="bio-links"><a href="https://veznik.cz" target="_blank" rel="noopener">veznik.cz</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 PŘEDPRODEJ -->
+<section class="section" id="predprodej">
+  <div class="section-inner">
+    <h2>Buďte u&nbsp;toho <span class="mark">od začátku.</span></h2>
+    <p class="lead" style="margin-bottom:44px;">Spouštíme MVP — první sada krátkých videí, na&nbsp;kterých začnete stavět. Zbytek průběžně dotáčíme a&nbsp;máte ho v&nbsp;ceně. Čím dřív se přidáte, tím nižší roční cenu si zamknete napořád.</p>
+    <!-- TODO: finální cena a odkaz na platební bránu (FIO+Benosaurus / ComGate). Číslo níže je NÁVRH k potvrzení. -->
+    <div class="ticket">
+      <span class="ticket-stamp">Předprodej MVP</span>
+      <div class="price-wrap">
+        <svg class="price-circle" viewBox="0 0 220 96"><path class="hand" d="M28 60C6 44 12 16 78 12c64-4 132 4 134 34 2 24-58 40-128 38" /></svg>
+        <div class="price-row"><span class="price-big">990&nbsp;Kč</span><span class="price-per">/&nbsp;rok</span><span class="price-was">1&nbsp;490&nbsp;Kč&nbsp;/&nbsp;rok</span></div>
+      </div>
+      <p class="price-note">Po&nbsp;spuštění už cena jenom poroste.</p>
+      <ul class="price-list">
+        <li>Celý kurz&nbsp;– od&nbsp;instalace po&nbsp;hotové weby, prezentace, texty i&nbsp;vizuály</li>
+        <li>Instalace krok za&nbsp;krokem pro&nbsp;Mac i&nbsp;Windows</li>
+        <li>Nový obsah, co průběžně přibývá&nbsp;– máte ho v&nbsp;ceně</li>
+        <li>Komunita sólotvůrců a&nbsp;živé setkávačky&nbsp;– pomáháme si a&nbsp;inspirujeme se</li>
+        <li>Taháky k&nbsp;vytištění téměř ke&nbsp;každé lekci&nbsp;– nikdy vás nenecháme na&nbsp;holičkách</li>
+        <li>Cena 990&nbsp;Kč/rok zamčená napořád</li>
+      </ul>
+      <a href="mailto:info@hados.cz?subject=Předprodej%20kurzu%20AI%20pro%20sólotvůrce" class="btn-buy">Chci se přidat →</a>
+      <p class="price-sub">Stačí běžný notebook a&nbsp;chuť to zkusit. Když to zvládli netechnici jako my, zvládnete to taky.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 FAQ -->
+<section class="section" style="background:var(--bg-soft)">
+  <div class="section-inner">
+    <h2>Než se rozhodnete.</h2>
+    <div class="faq" style="margin-top:24px;">
+      <div class="faq-item"><div class="faq-q"><span class="q"></span> Musím umět programovat?</div><p class="faq-a">Ne. O&nbsp;to přesně jde. Kurz je pro lidi, kteří nikdy nenapsali řádku kódu. Neučíme programování — učíme, jak s&nbsp;AI dostat hotový výsledek.</p></div>
+      <div class="faq-item"><div class="faq-q"><span class="q"></span> Potřebuju drahý počítač nebo Mac?</div><p class="faq-a">Stačí běžný notebook. Instalaci ukazujeme zvlášť pro <strong>macOS</strong> i&nbsp;<strong>Windows</strong>, takže nezáleží, co máte.</p></div>
+      <div class="faq-item"><div class="faq-q"><span class="q"></span> Platí se jednou, nebo každý rok?</div><p class="faq-a">Je to <strong>roční předplatné</strong>, teď v&nbsp;předprodeji za&nbsp;990&nbsp;Kč. Hlavní výhoda: cenu, za&nbsp;kterou se přidáte, máte <strong>zamčenou napořád</strong>. Kdo vezme 990&nbsp;Kč/rok teď, platí 990&nbsp;Kč/rok i&nbsp;za&nbsp;pět let&nbsp;– i&nbsp;když pro nově příchozí mezitím zdražíme.</p></div>
+      <div class="faq-item"><div class="faq-q"><span class="q"></span> Jak dlouho mi to zabere?</div><p class="faq-a">Videa jsou krátká a&nbsp;jdete vlastním tempem. Nejde o&nbsp;to něco prosvištět&nbsp;– jsme tu s&nbsp;vámi dlouhodobě a&nbsp;vědomě nikam neženeme.</p></div>
+      <div class="faq-item"><div class="faq-q"><span class="q"></span> Co když se zaseknu?</div><p class="faq-a">Nezůstanete na&nbsp;to sami&nbsp;– a&nbsp;to je to nejdůležitější. Dostanete taháky k&nbsp;vytištění s&nbsp;nejčastějšími chybami, scházíme se na&nbsp;online setkávačkách a&nbsp;poradíme si i&nbsp;navzájem v&nbsp;komunitě. Ať se zaseknete kdekoli, vždycky je po&nbsp;ruce někdo, kdo vás zase rozhýbe. Žádná otázka není hloupá&nbsp;– neajťáci si přece musí pomáhat.</p></div>
+      <div class="faq-item"><div class="faq-q"><span class="q"></span> Nezastará obsah za&nbsp;měsíc?</div><p class="faq-a">Právě proto je kurz živý a&nbsp;obsah průběžně doplňujeme&nbsp;– v&nbsp;AI je půl roku jako dekáda, takže na&nbsp;novinky reagujeme. Nehoníme se ale za&nbsp;každým novým modelem. Spíš řešíme, jak je jako sólotvůrci prakticky využít a&nbsp;jak si pomáhat v&nbsp;projektech, které sami tvoříme.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box">
+    <div class="cta-grid">
+      <div>
+        <h2>Nemusíte v&nbsp;tom být sami.</h2>
+        <p>Můžete se v&nbsp;tom motat sami týdny. Nebo se přidáte k&nbsp;partě, co tudy prošla před vámi&nbsp;– a&nbsp;táhne dál s&nbsp;vámi.</p>
+        <p class="cta-note">Předprodej MVP · spouštíme v&nbsp;červnu 2026.</p>
+      </div>
+      <a href="#predprodej" class="btn-cta-dark">Chci se přidat →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="kontakt">
+  <div class="footer-inner">
+    <div><h4>Hadoš s.r.o.</h4><p>IČ: 23822694<br/>Sídlo: Nad přívozem 1681/3, Braník, 14700 Praha 4<br/>Zapsáno v&nbsp;obchodním rejstříku vedeném Městským soudem v&nbsp;Praze, oddíl C, vložka 433479</p></div>
+    <div><h4>Kontakt</h4><p><a href="mailto:info@hados.cz">info@hados.cz</a></p></div>
+    <div><h4>Najdete nás také</h4><p><a href="https://hados.cz" target="_blank" rel="noopener">hados.cz</a><br/><a href="https://promptne.cz" target="_blank" rel="noopener">promptne.cz</a></p></div>
+  </div>
+  <div class="footer-meta">© 2026 Hadoš s.r.o. · Všechna práva hacknuta</div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    if (saved === 'light' || saved === 'dark') { root.setAttribute('data-theme', saved); }
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#themeToggle')) return;
+      var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+
+  // Ovládání rychlosti přehrávání intro videa
+  (function () {
+    var v = document.getElementById('introVideo');
+    if (!v) return;
+    var btns = document.querySelectorAll('.video-speed button');
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        v.playbackRate = parseFloat(b.getAttribute('data-rate'));
+        btns.forEach(function (x) { x.classList.remove('is-active'); });
+        b.classList.add('is-active');
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

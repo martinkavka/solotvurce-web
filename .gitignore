@@ -1,0 +1,6 @@
+# Track only the final preview page + author photos.
+*
+!index-v5.html
+!martin-kavka.jpg
+!roman-veznik.jpg
+!.gitignore
