@@ -273,8 +273,11 @@
     footer .footer-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; }
     @media (max-width: 720px) { footer .footer-inner { grid-template-columns: 1fr; gap: 24px; } }
     footer h4 { color: var(--text); font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; }
-    .pay-logos { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-    .pay-pill { font-size: .76rem; font-weight: 700; color: var(--text); background: var(--bg-soft); border: 1px solid var(--line-soft); border-radius: 5px; padding: 5px 10px; }
+    .pay-logos { margin-bottom: 14px; }
+    .pay-bar { width: 100%; max-width: 320px; height: auto; display: block; }
+    .pay-bar-light { display: none; }
+    :root[data-theme="light"] .pay-bar-dark { display: none; }
+    :root[data-theme="light"] .pay-bar-light { display: block; }
     .pay-foot { font-size: .84rem; color: var(--text-mut); line-height: 1.5; }
     footer a { color: var(--text-soft); text-decoration: none; border-bottom: 1px solid var(--line-soft); }
     footer a:hover { color: var(--yellow); border-color: var(--yellow); }
@@ -555,9 +558,12 @@
   <div class="footer-inner">
     <div><h4>Hadoš s.r.o.</h4><p>IČ: 23822694<br/>Sídlo: Nad přívozem 1681/3, Braník, 14700 Praha 4<br/>Zapsáno v&nbsp;obchodním rejstříku vedeném Městským soudem v&nbsp;Praze, oddíl C, vložka 433479<br/><a href="https://hados.cz" target="_blank" rel="noopener">hados.cz</a> · <a href="mailto:info@hados.cz">info@hados.cz</a></p></div>
     <div>
-      <h4>Platba</h4>
-      <div class="pay-logos"><span class="pay-pill">Visa</span><span class="pay-pill">Mastercard</span><span class="pay-pill">Apple&nbsp;Pay</span><span class="pay-pill">Google&nbsp;Pay</span></div>
-      <p class="pay-foot">Kartou, Apple&nbsp;Pay, Google&nbsp;Pay nebo převodem — bezpečně přes platební bránu <a href="https://www.comgate.eu" target="_blank" rel="noopener">Comgate</a>.</p>
+      <h4>Jak můžete zaplatit</h4>
+      <div class="pay-logos">
+        <img class="pay-bar pay-bar-dark" src="comgate-dark.png" width="2200" height="200" alt="Platební metody: Comgate, Visa, Mastercard, Google Pay, Apple Pay" />
+        <img class="pay-bar pay-bar-light" src="comgate-light.png" width="2200" height="200" alt="Platební metody: Comgate, Visa, Mastercard, Google Pay, Apple Pay" />
+      </div>
+      <p class="pay-foot">Vyberte si, jak vám to vyhovuje. Platbu pak bezpečně odbaví brána <a href="https://www.comgate.eu" target="_blank" rel="noopener">Comgate</a> — číslo vaší karty zůstává jen u&nbsp;ní.</p>
     </div>
   </div>
   <div class="footer-meta">© 2026 Hadoš s.r.o. · Sólotvůrci sobě · <a href="vop.html">Obchodní podmínky</a></div>
