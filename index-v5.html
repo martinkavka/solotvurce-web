@@ -45,7 +45,7 @@
       --icon:      #FFCC33;
       --num:       #FFCC33;
       --shadow:    rgba(0,0,0,.42);
-      --s1: #FFCC33;  --s2: #52B3D0;  --s3: rgba(0,0,0,.5);
+      --s1: #FFCC33;  --s2: #5eead4;  --s3: rgba(0,0,0,.5);
       --dot: #ffd24d;
     }
     /* SVĚTLÝ režim */
@@ -62,7 +62,7 @@
       --icon:      #223276;
       --num:       #e6b800;
       --shadow:    rgba(22,33,58,.30);
-      --s1: #223276;  --s2: #52B3D0;  --s3: #e6b800;
+      --s1: #223276;  --s2: #5eead4;  --s3: #e6b800;
       --dot: #223276;
     }
 
@@ -290,11 +290,6 @@
     .video iframe, .video video { width: 100%; aspect-ratio: 16 / 9; border: 2px solid var(--text); box-shadow: 11px 11px 0 var(--shadow); display: block; background: #000; }
     /* video sekci vyzvedneme nad celostránkový riso rastr, ať video není „puntíkované" */
     #video { z-index: 10000; }
-    .video-speed { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
-    .video-speed-label { font-family: var(--disp); font-style: italic; font-size: .95rem; color: var(--text-soft); margin-right: 2px; }
-    .video-speed button { font-family: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; padding: 5px 13px; background: var(--bg-soft); color: var(--text); border: 2px solid var(--text); box-shadow: 3px 3px 0 var(--shadow); transition: transform .12s, box-shadow .12s; }
-    .video-speed button:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--shadow); }
-    .video-speed button.is-active { background: var(--yellow); color: var(--ink); }
     .video-ph {
       position: relative; aspect-ratio: 16 / 9; cursor: pointer;
       background: var(--bg-soft); border: 2px solid var(--text); box-shadow: 11px 11px 0 var(--shadow);
@@ -385,20 +380,13 @@
     <h2>Ať víte, do&nbsp;čeho jdete. <span class="mark">Mrkněte dovnitř.</span></h2>
     <p class="lead" style="margin-bottom:40px;">Naše společné intro – jak mluvíme, jak věci ukazujeme a&nbsp;co od&nbsp;nás čekat. Žádné sliby, prostě se podívejte.</p>
     <div class="video">
-      <!-- Self-hosted intro video. Soubor pojmenuj intro.mp4 a dej ho do této složky.
-           Volitelně náhledový obrázek: přidej intro-poster.jpg a doplň poster="intro-poster.jpg" do <video>. -->
-      <video id="introVideo" controls preload="metadata" playsinline>
-        <source src="intro.mp4" type="video/mp4" />
-        Váš prohlížeč neumí přehrát vložené video. <a href="intro.mp4">Stáhnout video</a>.
-      </video>
-      <div class="video-speed" role="group" aria-label="Rychlost přehrávání">
-        <span class="video-speed-label">Rychlost přehrávání:</span>
-        <button type="button" data-rate="1" class="is-active">1×</button>
-        <button type="button" data-rate="1.25">1,25×</button>
-        <button type="button" data-rate="1.5">1,5×</button>
-        <button type="button" data-rate="1.75">1,75×</button>
-        <button type="button" data-rate="2">2×</button>
-      </div>
+      <!-- Intro video hostované na Cloudflare Stream (přehrávač má vlastní ovládání i rychlost přehrávání). -->
+      <iframe
+        src="https://customer-5ss5jipdnwo47ff0.cloudflarestream.com/71ab67aee3598687d7043e88c2d7ad1a/iframe"
+        title="Naše společné intro – AI pro sólotvůrce"
+        loading="lazy"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allowfullscreen="true"></iframe>
     </div>
   </div>
 </section>
@@ -586,20 +574,6 @@
       var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
       root.setAttribute('data-theme', next);
       try { localStorage.setItem('theme', next); } catch (e) {}
-    });
-  })();
-
-  // Ovládání rychlosti přehrávání intro videa
-  (function () {
-    var v = document.getElementById('introVideo');
-    if (!v) return;
-    var btns = document.querySelectorAll('.video-speed button');
-    btns.forEach(function (b) {
-      b.addEventListener('click', function () {
-        v.playbackRate = parseFloat(b.getAttribute('data-rate'));
-        btns.forEach(function (x) { x.classList.remove('is-active'); });
-        b.classList.add('is-active');
-      });
     });
   })();
 </script>
