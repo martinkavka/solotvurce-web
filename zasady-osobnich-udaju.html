@@ -75,7 +75,7 @@
     <ul>
       <li><strong>Jméno a&nbsp;příjmení</strong> – abychom vás mohli oslovit v&nbsp;aplikaci a&nbsp;v&nbsp;e-mailech.</li>
       <li><strong>E-mail</strong> – pro přihlášení, zaslání hesla, obnovu hesla, upozornění před koncem přístupu.</li>
-      <li><strong>Heslo</strong> ukládáme jen jako nečitelný otisk (PBKDF2-SHA256, 100 000 iterací) — vaše skutečné heslo nikde nemáme a&nbsp;nikdy ho nevidíme, ani my.</li>
+      <li><strong>Heslo</strong> ukládáme jen jako jednosměrný kryptografický otisk (hash, PBKDF2-SHA256, 100 000 iterací), ze kterého nejde získat původní heslo zpět. Samotné heslo nikde nemáme a&nbsp;nikdy ho nevidíme.</li>
       <li><strong>IP adresu při registraci a&nbsp;čas vašeho souhlasu</strong> – abychom uměli doložit, kdy jste souhlasili. Vyžaduje to GDPR.</li>
     </ul>
 
