@@ -270,6 +270,12 @@
     .bio p a:hover { color: var(--yellow); }
 
     /* ── PŘEDPRODEJ (ticket, hranatý) ── */
+    /* Předprodej – dva sloupce: vlevo cenový lístek, vpravo embed formuláře (Roman 2026-06-17). */
+    .predprodej-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; max-width: 1060px; margin: 0 auto; text-align: left; }
+    .predprodej-cols .ticket { max-width: none; }
+    .embed-card { background: var(--paper); color: var(--ink); border: 2px solid var(--ink); box-shadow: 11px 11px 0 var(--shadow); padding: 14px; position: relative; }
+    .embed-card #benosaurus-form { display: block; min-height: 520px; background: #fff; }
+    @media (max-width: 880px) { .predprodej-cols { grid-template-columns: 1fr; gap: 30px; } }
     .ticket { max-width: 520px; background: var(--paper); color: var(--ink); padding: 42px; position: relative; border: 2px solid var(--ink); box-shadow: 11px 11px 0 var(--shadow); }
     .ticket-stamp { position: absolute; top: -16px; right: 26px; background: var(--yellow); color: var(--ink); border: 2px solid var(--ink); font-size: .68rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 6px 16px; }
     .price-wrap { position: relative; display: inline-block; margin-bottom: 6px; }
@@ -538,26 +544,28 @@
     <h2>Buďte u&nbsp;toho <span class="mark">od začátku.</span></h2>
     <p class="lead" style="margin-bottom:44px;">Spouštíme první část kurzu – sadu krátkých videí, na&nbsp;kterých rovnou začnete stavět. Zbytek průběžně dotáčíme a&nbsp;máte ho v&nbsp;ceně. Čím dřív se přidáte, tím nižší roční cenu si zamknete napořád.</p>
     <!-- TODO: finální cena a odkaz na platební bránu (FIO+Benosaurus / ComGate). Číslo níže je NÁVRH k potvrzení. -->
-    <div class="ticket">
-      <span class="ticket-stamp">Předprodej</span>
-      <div class="price-wrap">
-        <svg class="price-circle" viewBox="0 0 220 96"><path class="hand" d="M28 60C6 44 12 16 78 12c64-4 132 4 134 34 2 24-58 40-128 38" /></svg>
-        <div class="price-row"><span class="price-big">990&nbsp;Kč</span><span class="price-per">/&nbsp;rok</span><span class="price-was">1&nbsp;490&nbsp;Kč&nbsp;/&nbsp;rok</span></div>
+    <div class="predprodej-cols">
+      <div class="ticket">
+        <span class="ticket-stamp">Předprodej</span>
+        <div class="price-wrap">
+          <svg class="price-circle" viewBox="0 0 220 96"><path class="hand" d="M28 60C6 44 12 16 78 12c64-4 132 4 134 34 2 24-58 40-128 38" /></svg>
+          <div class="price-row"><span class="price-big">990&nbsp;Kč</span><span class="price-per">/&nbsp;rok</span><span class="price-was">1&nbsp;490&nbsp;Kč&nbsp;/&nbsp;rok</span></div>
+        </div>
+        <p class="price-note">Zaváděcí cena platí jen do&nbsp;23.&nbsp;6. Po&nbsp;spuštění už poroste.</p>
+        <ul class="price-list">
+          <li>Celý kurz&nbsp;– od&nbsp;instalace po&nbsp;hotové weby, prezentace, texty i&nbsp;vizuály</li>
+          <li>Instalace krok za&nbsp;krokem pro&nbsp;Mac i&nbsp;Windows</li>
+          <li>Nový obsah průběžně přibývá&nbsp;– máte ho v&nbsp;ceně</li>
+          <li>Komunita sólotvůrců a&nbsp;živé setkávačky&nbsp;– pomáháme si a&nbsp;inspirujeme se</li>
+          <li>Taháky k&nbsp;vytištění téměř ke&nbsp;každé lekci&nbsp;– nikdy vás nenecháme na&nbsp;holičkách</li>
+          <li>Cena 990&nbsp;Kč/rok zamčená napořád</li>
+        </ul>
       </div>
-      <p class="price-note">Zaváděcí cena platí jen do&nbsp;23.&nbsp;6. Po&nbsp;spuštění už poroste.</p>
-      <ul class="price-list">
-        <li>Celý kurz&nbsp;– od&nbsp;instalace po&nbsp;hotové weby, prezentace, texty i&nbsp;vizuály</li>
-        <li>Instalace krok za&nbsp;krokem pro&nbsp;Mac i&nbsp;Windows</li>
-        <li>Nový obsah průběžně přibývá&nbsp;– máte ho v&nbsp;ceně</li>
-        <li>Komunita sólotvůrců a&nbsp;živé setkávačky&nbsp;– pomáháme si a&nbsp;inspirujeme se</li>
-        <li>Taháky k&nbsp;vytištění téměř ke&nbsp;každé lekci&nbsp;– nikdy vás nenecháme na&nbsp;holičkách</li>
-        <li>Cena 990&nbsp;Kč/rok zamčená napořád</li>
-      </ul>
-      <iframe id="benosaurus-form" src="https://naveromag.cz/objednavka/ai-pro-solotvurce?embed=1&compact=1" style="width:100%;border:none;overflow:hidden;" loading="lazy" title="Objednávka kurzu AI pro sólotvůrce"></iframe>
-      <script>window.addEventListener('message',e=>{if(e.data?.type==='benosaurus-resize')document.getElementById('benosaurus-form').style.height=e.data.height+'px'});</script>
-      <!-- Po nasazení ComGate vrátit: Karta · Apple Pay · Google Pay · převod – bezpečně přes ComGate -->
-      <p class="pay-methods">Zaplatíte bankovním převodem. Brzy přidáme i&nbsp;další možnosti.</p>
-      <p class="price-sub">Koupí souhlasíte s&nbsp;<a href="vop.html" style="color:var(--ink); border-bottom:1px solid var(--yellow-dark); text-decoration:none;">obchodními podmínkami</a>.</p>
+      <div class="embed-card">
+        <iframe id="benosaurus-form" src="https://naveromag.cz/objednavka/ai-pro-solotvurce?embed=1&compact=1" style="width:100%;border:none;overflow:hidden;" loading="lazy" title="Objednávka kurzu AI pro sólotvůrce"></iframe>
+        <script>window.addEventListener('message',e=>{if(e.data?.type==='benosaurus-resize')document.getElementById('benosaurus-form').style.height=e.data.height+'px'});</script>
+        <p class="price-sub" style="margin-top:14px;">Koupí souhlasíte s&nbsp;<a href="vop.html" style="color:var(--ink); border-bottom:1px solid var(--yellow-dark); text-decoration:none;">obchodními podmínkami</a>.</p>
+      </div>
     </div>
   </div>
 </section>
