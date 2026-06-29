@@ -329,6 +329,10 @@
     .pay-bar-light { display: none; }
     :root[data-theme="light"] .pay-bar-dark { display: none; }
     :root[data-theme="light"] .pay-bar-light { display: block; }
+    .pay-methods { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+    .pay-methods li { font-size: .9rem; color: var(--text-soft); line-height: 1.45; padding-left: 18px; position: relative; }
+    .pay-methods li::before { content: ""; position: absolute; left: 0; top: .5em; width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); }
+    .pay-methods strong { color: var(--text); font-weight: 700; }
     .pay-foot { font-size: .84rem; color: var(--text-mut); line-height: 1.5; }
     footer a { color: var(--text-soft); text-decoration: none; border-bottom: 1px solid var(--line-soft); }
     footer a:hover { color: var(--yellow); border-color: var(--yellow); }
@@ -613,7 +617,11 @@
         <img class="pay-bar pay-bar-light" src="comgate-light.png" width="1975" height="120" alt="Platební metody: Comgate, Visa, Mastercard, Google Pay, Apple Pay" />
         <a class="pay-comgate" href="https://www.comgate.eu" target="_blank" rel="noopener" aria-label="Platební brána Comgate"></a>
       </div>
-      <p class="pay-foot">Platba kartou (Visa, Mastercard, Apple&nbsp;Pay, Google&nbsp;Pay) přes zabezpečenou bránu&nbsp;Comgate, nebo rychlým bankovním převodem přes QR kód.</p>
+      <ul class="pay-methods">
+        <li><strong>Kartou</strong> – Visa, Mastercard, Apple&nbsp;Pay, Google&nbsp;Pay</li>
+        <li><strong>Bankovním převodem</strong> – rychlým online převodem i&nbsp;přes QR&nbsp;kód</li>
+      </ul>
+      <p class="pay-foot">Online platby zajišťuje zabezpečená platební brána&nbsp;Comgate.</p>
     </div>
   </div>
   <div class="footer-meta">© 2026 Hadoš s.r.o. · Sólotvůrci sobě · <a href="platba.html">Platba a&nbsp;doručení</a> · <a href="vop.html">Obchodní podmínky</a> · <a href="zasady-osobnich-udaju.html">Ochrana osobních údajů</a></div>
